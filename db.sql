@@ -14,12 +14,15 @@ CREATE TABLE users (
     full_name VARCHAR(150) NOT NULL,
     phone_number VARCHAR(30),
     email VARCHAR(150) UNIQUE,
+    gender VARCHAR(20),
     password_hash VARCHAR(255) NOT NULL,
     role ENUM('citizen', 'official', 'moderator', 'legal_aid') NOT NULL,
     ward VARCHAR(100),
     is_anonymous_allowed BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
+
+
 
 -- =====================================================
 -- 2. COMMUNITY REPORTING
@@ -219,3 +222,4 @@ CREATE TABLE service_metrics (
     metric_value DECIMAL(10,2) NOT NULL,
     recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
+
