@@ -1,0 +1,25 @@
+{
+  "name": "tuwaze",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mercy-5120/Tuwaze.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mercy-5120/Tuwaze/issues"
+  },
+  "homepage": "https://github.com/mercy-5120/Tuwaze#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.16.2"
+  }
+}
