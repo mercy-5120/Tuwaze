@@ -21,6 +21,24 @@ app.get("/signup", (req, res)=>{
   res.render("signup.ejs")
 });
 
+app.post("/signup",express.urlencoded({extended: true}), (req, res) => {//encodes the form data and makes it available in req.body
+  console.log(req.body);
+  const insertStatement = `INSERT INTO users (full_name, phone_number, email, gender, password_hash, role, ward, is_anonymous_allowed) VALUES
+('${req.body.fullname}', '${req.body.phone}', '${req.body.email}', '${req.body.gender}', '${req.body.password}', 'citizen', '${req.body.location}', TRUE)`;
+
+connection.query(insertStatement, (insertError)=>{
+  if(insertError){
+    res.status(500).send("Server Error!!!");
+  }else{
+    res.redirect("/login");
+  }
+})
+
+  //res.send("Data received!!!");
+  //console.log(insertStatement);
+  
+});
+
 app.get("/login", (req, res)=>{
   res.render("login.ejs")
 });
@@ -57,3 +75,5 @@ app.get("/dashboard", (req, res) => {
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
+
+//look at bcrypt to hash and encrypt passwords before storing them in the database.
