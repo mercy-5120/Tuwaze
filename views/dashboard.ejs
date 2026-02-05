@@ -4,17 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .container {
+            display: flex;
+            gap: 40px;
+            margin: 20px;
+        }
+        .chart-container {
+            width: 400px;
+            height: 400px;
+        }
+        .user-list {
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
     <h1>Dashboard</h1>
-    <p>Male Count: <%= maleFemaleCount.male %></p>
-    <p>Female Count: <%= maleFemaleCount.female %></p>
+    
+    <div class="container">
+        <!-- Chart Section -->
+        <div class="chart-container">
+            <h2>Gender Distribution</h2>
+            <h3>Male: <%= maleFemaleCount.male %></h3>
+            <h3>Female: <%= maleFemaleCount.female %></h3>
+            <canvas id="genderChart"></canvas>
+        </div>
+        
+        <!-- User List Section -->
+        <div class="user-list">
+            <h2>All Users (<%= allUsers.length %>)</h2>
+            <ol>
+                <% allUsers.forEach(user => { %>
+                    <li><%= user.full_name %> - <%= user.gender %></li>
+                <% }) %>
+            </ol>
+        </div>
+    </div>
 
-    <ol>
-        <%allUsers.forEach(user =>{ %>
-            <li><%= user.name %> - <%= user.email %></li>
-
-        })
-    </ol>
+    <script>
+        // Parse chart data passed from server
+        const chartData = <%- chartData %>;
+        
+        // Chart.js configuration (simplified for gender distribution)
+        const config = {
+            type: 'pie',
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        // Initialize the chart
+        window.onload = function() {
+            const ctx = document.getElementById('genderChart').getContext('2d');
+            new Chart(ctx, config);
+        };
+    </script>
 </body>
 </html>
