@@ -15,17 +15,23 @@ const connection = mysql.createConnection({
 //2. Register middleware functions to handle incoming requests and responses
 app.use(
   session({
-    secret:"encryptionKey",
+    secret: "encryptionKey",
     resave: false,
     saveUninitialized: true,
-    options: {secure: true, expires: new Date(Date.now() +60 * 60 * 1000)} //expires in 1 hour
-    
+    options: { secure: true, expires: new Date(Date.now() + 60 * 60 * 1000) }, //expires in 1 hour
   }),
 );
-const isLoggedIn = true;
+let isLoggedIn;
+let loggedInUser;
 const privateRoutes = ["/dashboard", "/profile"];
 app.use((req, res, next) => {
   console.log("Middleware function executed!");
+  if (req.session.user) {
+    isLoggedIn = true;
+    loggedInUser = req.session.user;
+  } else {
+    isLoggedIn = false;
+  }
   if (isLoggedIn || !privateRoutes.includes(req.path)) {
     next();
   } else {
@@ -75,15 +81,15 @@ app.post("/auth", (req, res) => {
       } else {
         console.log(queryResult);
         if (queryResult.length > 0) {
-        if (req.body.password === queryResult[0].password_hash) {
-          //passwords match, user is authenticated
-          req.session.user = queryResult[0]; //store user info in session manager
-          res.redirect("/dashboard");
-          //password is wrong, authentication failed
+          if (req.body.password === queryResult[0].password_hash) {
+            //passwords match, user is authenticated
+            req.session.user = queryResult[0]; //store user info in session manager
+            res.redirect("/dashboard");
+            //password is wrong, authentication failed
+          } else {
+            res.send("Invalid email or password");
+          }
         } else {
-          res.send("Invalid email or password");
-        }}
-        else{
           res.send("Invalid email or password");
         }
       }
