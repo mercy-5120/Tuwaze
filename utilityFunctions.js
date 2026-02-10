@@ -3,9 +3,11 @@ function getGenderCount(users) {
     (count, user) => {
       if (user.gender === "Male") count.male += 1;
       if (user.gender === "Female") count.female += 1;
+      if (user.gender === "Other") count.other +=1;
+      if (user.gender === "Prefer not to say") count.prefer_not_to_say +=1;
       return count;
     },
-    { male: 0, female: 0 },
+    { male: 0, female: 0, other: 0, prefer_not_to_say: 0 },
   );
 }
 
