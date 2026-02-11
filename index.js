@@ -39,6 +39,7 @@ app.use((req, res, next) => {
   }
 });
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies (form data)
+app.use(express.static("public")); // Middleware to serve static files from the "public" directory
 //3. Register routes/pages/endpoint handlers
 app.get("/", (req, res) => {
   res.render("home.ejs");
